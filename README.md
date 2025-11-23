@@ -4,7 +4,7 @@ A simple FastAPI application with a Hello World endpoint.
 
 ## Installation
 
-1. Create a virtual environment:
+1. Create and activate virtual environment:
 ```bash
 python -m venv venv
 ```
@@ -19,33 +19,30 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-3. Install dependencies:
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-## Running the Application
+## Running the API
 
-### Development Mode
+Start the development server:
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Production Mode
-```bash
-python main.py
-```
+The API will be available at `http://localhost:8000`
+
+## API Documentation
+
+Once running, visit:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
 
 ## API Endpoints
 
-- `GET /` - Returns a Hello World message
-- `GET /health` - Health check endpoint
-- `GET /docs` - Interactive API documentation (Swagger UI)
-- `GET /redoc` - Alternative API documentation (ReDoc)
 
 ## Testing
 
-Once the server is running, you can:
-1. Visit http://localhost:8000 to see the Hello World message
-2. Visit http://localhost:8000/docs to see the interactive API documentation
-3. Visit http://localhost:8000/health for the health check
+
+pytest tests/test_auth.py -v
