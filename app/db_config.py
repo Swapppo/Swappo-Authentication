@@ -1,8 +1,9 @@
 import os
-from sqlalchemy import create_engine, Column, String, Boolean, DateTime
+from datetime import datetime
+
+from sqlalchemy import Boolean, Column, DateTime, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from datetime import datetime
 
 # Get database URL from environment variable or use SQLite for development
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./swappo_auth.db")

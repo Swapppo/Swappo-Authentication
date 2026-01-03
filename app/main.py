@@ -1,25 +1,26 @@
-from fastapi import FastAPI, HTTPException, status, Depends
-from fastapi.middleware.cors import CORSMiddleware
-from datetime import timedelta
-from sqlalchemy.orm import Session
 import os
+from datetime import timedelta
 
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+
+from .auth import (
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+    create_access_token,
+    create_refresh_token,
+    get_current_user,
+    get_password_hash,
+    verify_password,
+    verify_token,
+)
 from .models import (
+    ChangePassword,
+    RefreshTokenRequest,
+    Token,
     UserCreate,
     UserLogin,
     UserResponse,
-    Token,
-    RefreshTokenRequest,
-    ChangePassword,
-)
-from .auth import (
-    get_password_hash,
-    verify_password,
-    create_access_token,
-    create_refresh_token,
-    verify_token,
-    get_current_user,
-    ACCESS_TOKEN_EXPIRE_MINUTES,
 )
 
 # Check if we should use SQL database or in-memory
@@ -27,10 +28,10 @@ USE_SQL_DB = os.getenv("DATABASE_URL") is not None
 
 if USE_SQL_DB:
     from .database_sql import (
-        get_user_by_email,
         create_user,
-        update_user_password,
+        get_user_by_email,
         get_user_by_id,
+        update_user_password,
     )
     from .db_config import get_db, init_db
 
@@ -38,10 +39,10 @@ if USE_SQL_DB:
     init_db()
 else:
     from .database import (
-        get_user_by_email,
         create_user,
-        update_user_password,
+        get_user_by_email,
         get_user_by_id,
+        update_user_password,
     )
 
 app = FastAPI(

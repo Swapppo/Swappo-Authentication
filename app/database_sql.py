@@ -1,7 +1,9 @@
-from typing import Optional
-from datetime import datetime
 import uuid
+from datetime import datetime
+from typing import Optional
+
 from sqlalchemy.orm import Session
+
 from .db_config import UserDB
 
 

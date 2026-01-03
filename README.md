@@ -63,5 +63,5 @@ Once running, visit:
 
 pytest tests/test_auth.py -v
 
-## Api Shema 
+## Api Shema
 python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > api_schema.json
