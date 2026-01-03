@@ -7,7 +7,10 @@ client = TestClient(app)
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Hello World"}
+    data = response.json()
+    assert data["message"] == "Authentication Microservice API"
+    assert data["version"] == "1.0.0"
+    assert "endpoints" in data
 
 
 def test_health_check():
