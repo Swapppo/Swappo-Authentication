@@ -20,6 +20,7 @@ from .models import (
     Token,
     UserCreate,
     UserLogin,
+    UserProfileUpdate,
     UserResponse,
 )
 
@@ -32,6 +33,7 @@ if USE_SQL_DB:
         get_user_by_email,
         get_user_by_id,
         update_user_password,
+        update_user_profile,
     )
     from .db_config import get_db, init_db
 
@@ -257,6 +259,42 @@ async def change_password(
     return {"message": "Password changed successfully"}
 
 
+@app.put("/api/v1/auth/profile", response_model=UserResponse)
+async def update_profile(
+    profile_data: UserProfileUpdate,
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db) if USE_SQL_DB else Depends(lambda: None),
+):
+    """Update user profile information including shipping address."""
+    if not USE_SQL_DB:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Profile updates require SQL database",
+        )
+
+    # Update user profile
+    updated_user = update_user_profile(
+        db,
+        current_user["user_id"],
+        full_name=profile_data.full_name,
+        phone=profile_data.phone,
+        address_line1=profile_data.address_line1,
+        address_line2=profile_data.address_line2,
+        city=profile_data.city,
+        state=profile_data.state,
+        postal_code=profile_data.postal_code,
+        country=profile_data.country,
+    )
+
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return UserResponse(**updated_user)
+
+
+@app.p
 @app.post("/api/v1/auth/logout")
 async def logout(current_user: dict = Depends(get_current_user)):
     """Logout user (client should delete tokens)."""

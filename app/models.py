@@ -26,6 +26,32 @@ class UserResponse(BaseModel):
     created_at: datetime
     is_active: bool
 
+    # Profile fields
+    phone: Optional[str] = None
+
+    # Shipping address fields
+    address_line1: Optional[str] = None
+    address_line2: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    postal_code: Optional[str] = None
+    country: Optional[str] = None
+
+
+class UserProfileUpdate(BaseModel):
+    """Model for updating user profile information"""
+
+    full_name: Optional[str] = None
+    phone: Optional[str] = None
+
+    # Shipping address fields
+    address_line1: Optional[str] = None
+    address_line2: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    postal_code: Optional[str] = None
+    country: Optional[str] = None
+
 
 class Token(BaseModel):
     access_token: str

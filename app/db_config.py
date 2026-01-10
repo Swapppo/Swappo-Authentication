@@ -29,6 +29,17 @@ class UserDB(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
 
+    # Profile fields
+    phone = Column(String, nullable=True)
+
+    # Shipping address fields
+    address_line1 = Column(String, nullable=True)
+    address_line2 = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    state = Column(String, nullable=True)
+    postal_code = Column(String, nullable=True)
+    country = Column(String, nullable=True, default="US")
+
 
 # Create tables
 def init_db():
