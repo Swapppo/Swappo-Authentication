@@ -37,28 +37,32 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
+    - name: Install gke-gcloud-auth-plugin
+      run: |
+        gcloud components install gke-gcloud-auth-plugin --quiet
+
     - name: Configure kubectl
       run: |
         gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} \
           --zone ${{ env.GKE_ZONE }} \
-          --project ${{ secrets.GCP_PROJECT_ID }}
+          --project ${{ env.GCP_PROJECT_ID }}
 
     - name: Restart deployment
       run: |
-        kubectl rollout restart deployment/${{ env.SERVICE_NAME }}-service -n ${{ env.NAMESPACE }}
+        kubectl rollout restart deployment/${{ env.SERVICE_NAME }} -n ${{ env.NAMESPACE }}
 
     - name: Wait for rollout to complete
       run: |
-        kubectl rollout status deployment/${{ env.SERVICE_NAME }}-service -n ${{ env.NAMESPACE }} --timeout=5m
+        kubectl rollout status deployment/${{ env.SERVICE_NAME }} -n ${{ env.NAMESPACE }} --timeout=5m
 
     - name: Verify deployment
       run: |
-        kubectl get pods -n ${{ env.NAMESPACE }} -l app=${{ env.SERVICE_NAME }}-service
+        kubectl get pods -n ${{ env.NAMESPACE }} -l app=${{ env.SERVICE_NAME }}
         echo "✅ Deployment successful!"
 
     - name: Cleanup old pods
       run: |
         # Delete any pods in CrashLoopBackOff or Error state
-        kubectl get pods -n ${{ env.NAMESPACE }} -l app=${{ env.SERVICE_NAME }}-service \
+        kubectl get pods -n ${{ env.NAMESPACE }} -l app=${{ env.SERVICE_NAME }} \
           --field-selector=status.phase=Failed -o name | xargs -r kubectl delete -n ${{ env.NAMESPACE }}
       continue-on-error: true
