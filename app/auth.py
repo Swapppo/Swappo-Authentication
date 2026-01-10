@@ -8,7 +8,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
-# Configuration
+# Configuration test deploz
 SECRET_KEY = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))
 REFRESH_SECRET_KEY = os.getenv("REFRESH_SECRET_KEY", secrets.token_urlsafe(32))
 ALGORITHM = "HS256"
