@@ -1,8 +1,10 @@
 import os
+import time
 from datetime import timedelta
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 from sqlalchemy.orm import Session
 
 from .auth import (
@@ -14,6 +16,7 @@ from .auth import (
     verify_password,
     verify_token,
 )
+from .metrics import record_http_request
 from .models import (
     ChangePassword,
     RefreshTokenRequest,
@@ -52,6 +55,30 @@ app = FastAPI(
     description="RESTful authentication API for mobile applications",
     version="1.0.0",
 )
+
+# Prometheus instrumentation
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
+
+
+# Middleware to track HTTP request metrics
+@app.middleware("http")
+async def metrics_middleware(request: Request, call_next):
+    if request.url.path == "/metrics":
+        return await call_next(request)
+
+    start_time = time.time()
+    response = await call_next(request)
+    duration = time.time() - start_time
+
+    record_http_request(
+        method=request.method,
+        endpoint=request.url.path,
+        status_code=response.status_code,
+        duration=duration,
+    )
+
+    return response
+
 
 # CORS middleware for mobile app
 app.add_middleware(

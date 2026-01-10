@@ -24,6 +24,10 @@ fastapi==0.115.4
 
 greenlet==3.2.4
 
+# Metrics
+prometheus-client==0.21.0
+prometheus-fastapi-instrumentator==7.0.0
+
 h11==0.16.0
 
 httpcore==1.0.9
