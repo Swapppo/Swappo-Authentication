@@ -294,7 +294,6 @@ async def update_profile(
     return UserResponse(**updated_user)
 
 
-@app.p
 @app.post("/api/v1/auth/logout")
 async def logout(current_user: dict = Depends(get_current_user)):
     """Logout user (client should delete tokens)."""
