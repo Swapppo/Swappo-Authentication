@@ -51,9 +51,45 @@ else:
     )
 
 app = FastAPI(
-    title="Authentication Microservice",
-    description="RESTful authentication API for mobile applications",
+    title="Swappo Authentication Service",
+    description="""## Authentication & User Management API
+
+**Swappo Auth Service** provides secure user authentication and profile management.
+
+### Features
+- 🔐 User registration and login
+- 🎫 JWT token-based authentication (access + refresh tokens)
+- 👤 User profile management
+- 🔑 Password management and updates
+
+### Authentication Flow
+1. Register a new user at `/api/v1/register`
+2. Login to receive access and refresh tokens at `/api/v1/login`
+3. Include `Authorization: Bearer <access_token>` header in authenticated requests
+4. Refresh expired tokens at `/api/v1/refresh`
+
+### Security
+- Passwords are hashed using bcrypt
+- Access tokens expire in 30 minutes
+- Refresh tokens expire in 7 days
+    """,
     version="1.0.0",
+    contact={
+        "name": "Swappo API Support",
+        "url": "https://swappo.art",
+        "email": "api@swappo.art",
+    },
+    license_info={
+        "name": "MIT",
+    },
+    openapi_tags=[
+        {"name": "Health", "description": "Service health and status endpoints"},
+        {
+            "name": "Authentication",
+            "description": "User login, registration, and token management",
+        },
+        {"name": "User Profile", "description": "User profile management and updates"},
+    ],
 )
 
 # Prometheus instrumentation
