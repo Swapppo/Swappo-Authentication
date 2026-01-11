@@ -74,6 +74,7 @@ app = FastAPI(
 - Refresh tokens expire in 7 days
     """,
     version="1.0.0",
+    root_path="/auth",  # Fix for Kong reverse proxy - enables correct OpenAPI schema URLs
     contact={
         "name": "Swappo API Support",
         "url": "https://swappo.art",
