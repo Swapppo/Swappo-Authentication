@@ -358,6 +358,22 @@ async def update_profile(
     return UserResponse(**updated_user)
 
 
+@app.get("/api/v1/auth/users/{user_id}", response_model=UserResponse)
+async def get_user_by_id_endpoint(
+    user_id: str,
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db) if USE_SQL_DB else Depends(lambda: None),
+):
+    """Get user information by ID."""
+    user = get_user_by_id(db, user_id) if USE_SQL_DB else get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return UserResponse(**user)
+
+
 @app.post("/api/v1/auth/logout")
 async def logout(current_user: dict = Depends(get_current_user)):
     """Logout user (client should delete tokens)."""
