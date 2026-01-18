@@ -56,12 +56,6 @@ app = FastAPI(
 
 **Swappo Auth Service** provides secure user authentication and profile management.
 
-### Features
-- 🔐 User registration and login
-- 🎫 JWT token-based authentication (access + refresh tokens)
-- 👤 User profile management
-- 🔑 Password management and updates
-
 ### Authentication Flow
 1. Register a new user at `/api/v1/register`
 2. Login to receive access and refresh tokens at `/api/v1/login`
@@ -72,6 +66,7 @@ app = FastAPI(
 - Passwords are hashed using bcrypt
 - Access tokens expire in 30 minutes
 - Refresh tokens expire in 7 days
+
     """,
     version="1.0.0",
     root_path="/auth",  # Fix for Kong reverse proxy - enables correct OpenAPI schema URLs
