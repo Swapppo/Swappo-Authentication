@@ -12,6 +12,9 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./swappo_auth.db")
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {},
+    pool_size=5,
+    max_overflow=0,
+    pool_pre_ping=True,
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
